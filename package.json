@@ -1,6 +1,6 @@
 {
-  "name": "@codetrix-studio/capacitor-google-auth",
-  "version": "3.4.0-rc.4",
+  "name": "@belongnet/capacitor-google-auth",
+  "version": "6.0.0-rc.0",
   "description": "Google Auth plugin for capacitor.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -13,22 +13,22 @@
     "test": "echo \"no test specified\"",
     "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md"
   },
-  "author": "CodetrixStudio",
+  "author": "Belongnet",
   "license": "MIT",
   "devDependencies": {
-    "@capacitor/android": "^6.0.0",
-    "@capacitor/cli": "^6.0.0",
-    "@capacitor/core": "^6.0.0",
-    "@capacitor/docgen": "^0.2.1",
-    "@capacitor/ios": "^6.0.0",
-    "@ionic/prettier-config": "^2.0.0",
+    "@capacitor/android": "^6.1.1",
+    "@capacitor/cli": "^6.1.1",
+    "@capacitor/core": "^6.1.1",
+    "@capacitor/docgen": "^0.2.2",
+    "@capacitor/ios": "^6.1.1",
+    "@ionic/prettier-config": "^4.0.0",
     "@types/gapi": "0.0.42",
     "@types/gapi.auth2": "0.0.56",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": "^6.1.1"
   },
   "files": [
     "dist/",
@@ -36,7 +36,7 @@
     "android/",
     "!android/src/androidTest",
     "!android/src/test",
-    "CodetrixStudioCapacitorGoogleAuth.podspec"
+    "BelongnetCapacitorGoogleAuth.podspec"
   ],
   "keywords": [
     "capacitor",
@@ -60,10 +60,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CodetrixStudio/CapacitorGoogleAuth"
+    "url": "https://github.com/belongnet/CapacitorGoogleAuth"
   },
   "bugs": {
-    "url": "https://github.com/CodetrixStudio/CapacitorGoogleAuth/issues"
+    "url": "https://github.com/belongnet/CapacitorGoogleAuth/issues"
   },
   "prettier": "@ionic/prettier-config"
 }
