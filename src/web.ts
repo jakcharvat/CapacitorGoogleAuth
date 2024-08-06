@@ -38,7 +38,7 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
       clientId: '',
       scopes: [],
       grantOfflineAccess: false,
-    }
+    },
   ): Promise<void> {
     if (typeof window === 'undefined') {
       return;

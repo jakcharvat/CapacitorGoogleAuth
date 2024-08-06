@@ -258,11 +258,11 @@ export default config;
 
 <docgen-index>
 
-- [`initialize(...)`](#initialize)
-- [`signIn()`](#signin)
-- [`refresh()`](#refresh)
-- [`signOut()`](#signout)
-- [Interfaces](#interfaces)
+* [`initialize(...)`](#initialize)
+* [`signIn()`](#signin)
+* [`refresh()`](#refresh)
+* [`signOut()`](#signout)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 <docgen-api>
@@ -271,7 +271,7 @@ export default config;
 ### initialize(...)
 
 ```typescript
-initialize(options?: InitOptions) => void
+initialize(options?: InitOptions) => any
 ```
 
 Initializes the GoogleAuthPlugin, loading the gapi library and setting up the plugin.
@@ -280,55 +280,63 @@ Initializes the GoogleAuthPlugin, loading the gapi library and setting up the pl
 | ------------- | --------------------------------------------------- | ---------------------------------- |
 | **`options`** | <code><a href="#initoptions">InitOptions</a></code> | - Optional initialization options. |
 
+**Returns:** <code>any</code>
+
 **Since:** 3.1.0
 
----
+--------------------
+
 
 ### signIn()
 
 ```typescript
-signIn() => Promise<User>
+signIn() => any
 ```
 
 Initiates the sign-in process and returns a Promise that resolves with the user information.
 
-**Returns:** <code>Promise&lt;<a href="#user">User</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### refresh()
 
 ```typescript
-refresh() => Promise<Authentication>
+refresh() => any
 ```
 
 Refreshes the authentication token and returns a Promise that resolves with the updated authentication details.
 
-**Returns:** <code>Promise&lt;<a href="#authentication">Authentication</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### signOut()
 
 ```typescript
-signOut() => Promise<any>
+signOut() => any
 ```
 
 Signs out the user and returns a Promise.
 
-**Returns:** <code>Promise&lt;any&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### Interfaces
 
+
 #### InitOptions
 
-| Prop                     | Type                  | Description                                                                                                                                      | Default            | Since      |
-| ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ---------- |
-| **`clientId`**           | <code>string</code>   | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |                    | 3.1.0      |
-| **`scopes`**             | <code>string[]</code> | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |                    | 3.4.0-rc.4 |
-| **`grantOfflineAccess`** | <code>boolean</code>  | Set if your application needs to refresh access tokens when the user is not present at the browser. In response use `serverAuthCode` key         | <code>false</code> | 3.1.0      |
+| Prop                     | Type                 | Description                                                                                                                                      | Default            | Since |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`clientId`**           | <code>string</code>  | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |                    | 3.1.0 |
+| **`scopes`**             | <code>{}</code>      | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |                    |       |
+| **`grantOfflineAccess`** | <code>boolean</code> | Set if your application needs to refresh access tokens when the user is not present at the browser. In response use `serverAuthCode` key         | <code>false</code> | 3.1.0 |
+
 
 #### User
 
@@ -342,6 +350,7 @@ Signs out the user and returns a Promise.
 | **`imageUrl`**       | <code>string</code>                                       | The URL of the user's profile picture.                              |
 | **`serverAuthCode`** | <code>string</code>                                       | The server authentication code.                                     |
 | **`authentication`** | <code><a href="#authentication">Authentication</a></code> | The authentication details including access, refresh and ID tokens. |
+
 
 #### Authentication
 

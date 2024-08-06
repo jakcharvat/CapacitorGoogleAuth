@@ -2,19 +2,48 @@
   "name": "@belongnet/capacitor-google-auth",
   "version": "6.0.0-rc.0",
   "description": "Google Auth plugin for capacitor.",
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native",
+    "google",
+    "auth",
+    "firebase",
+    "angular",
+    "vue",
+    "react",
+    "ionic"
+  ],
+  "bugs": {
+    "url": "https://github.com/belongnet/CapacitorGoogleAuth/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/belongnet/CapacitorGoogleAuth"
+  },
+  "license": "MIT",
+  "author": "Belongnet",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "!android/src/androidTest",
+    "!android/src/test",
+    "BelongnetCapacitorGoogleAuth.podspec"
+  ],
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "pnpm run clean && tsc",
     "clean": "rm -rf ./dist",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build",
+    "dev": "tsc --watch",
+    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md",
+    "format": "prettier --write ./src",
     "prepare": "tsc",
-    "test": "echo \"no test specified\"",
-    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md"
+    "prepublishOnly": "pnpm run build",
+    "test": "echo \"no test specified\""
   },
-  "author": "Belongnet",
-  "license": "MIT",
+  "prettier": "@ionic/prettier-config",
   "devDependencies": {
     "@capacitor/android": "^6.1.1",
     "@capacitor/cli": "^6.1.1",
@@ -30,26 +59,6 @@
   "peerDependencies": {
     "@capacitor/core": "^6.1.1"
   },
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "!android/src/androidTest",
-    "!android/src/test",
-    "BelongnetCapacitorGoogleAuth.podspec"
-  ],
-  "keywords": [
-    "capacitor",
-    "plugin",
-    "native",
-    "google",
-    "auth",
-    "firebase",
-    "angular",
-    "vue",
-    "react",
-    "ionic"
-  ],
   "capacitor": {
     "ios": {
       "src": "ios"
@@ -57,13 +66,5 @@
     "android": {
       "src": "android"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/belongnet/CapacitorGoogleAuth"
-  },
-  "bugs": {
-    "url": "https://github.com/belongnet/CapacitorGoogleAuth/issues"
-  },
-  "prettier": "@ionic/prettier-config"
+  }
 }
