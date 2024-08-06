@@ -59,6 +59,9 @@
   "peerDependencies": {
     "@capacitor/core": "^6.1.1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "capacitor": {
     "ios": {
       "src": "ios"
