@@ -1,4 +1,9 @@
 <h1 align="center">CapacitorGoogleAuth</h1>
+
+<p align="center">
+<img src="assets/cover.gif" alt="cover" height="521">
+</p>
+
 <p align="center"><strong><code>@belongnet/capacitor-google-auth</code></strong></p>
 <p align="center"><strong>CAPACITOR 6</strong></p>
 <p align="center">
@@ -258,11 +263,11 @@ export default config;
 
 <docgen-index>
 
-* [`initialize(...)`](#initialize)
-* [`signIn()`](#signin)
-* [`refresh()`](#refresh)
-* [`signOut()`](#signout)
-* [Interfaces](#interfaces)
+- [`initialize(...)`](#initialize)
+- [`signIn()`](#signin)
+- [`refresh()`](#refresh)
+- [`signOut()`](#signout)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 <docgen-api>
@@ -284,8 +289,7 @@ Initializes the GoogleAuthPlugin, loading the gapi library and setting up the pl
 
 **Since:** 3.1.0
 
---------------------
-
+---
 
 ### signIn()
 
@@ -297,8 +301,7 @@ Initiates the sign-in process and returns a Promise that resolves with the user 
 
 **Returns:** <code>any</code>
 
---------------------
-
+---
 
 ### refresh()
 
@@ -310,8 +313,7 @@ Refreshes the authentication token and returns a Promise that resolves with the 
 
 **Returns:** <code>any</code>
 
---------------------
-
+---
 
 ### signOut()
 
@@ -323,11 +325,9 @@ Signs out the user and returns a Promise.
 
 **Returns:** <code>any</code>
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### InitOptions
 
@@ -336,7 +336,6 @@ Signs out the user and returns a Promise.
 | **`clientId`**           | <code>string</code>  | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |                    | 3.1.0 |
 | **`scopes`**             | <code>{}</code>      | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |                    |       |
 | **`grantOfflineAccess`** | <code>boolean</code> | Set if your application needs to refresh access tokens when the user is not present at the browser. In response use `serverAuthCode` key         | <code>false</code> | 3.1.0 |
-
 
 #### User
 
@@ -350,7 +349,6 @@ Signs out the user and returns a Promise.
 | **`imageUrl`**       | <code>string</code>                                       | The URL of the user's profile picture.                              |
 | **`serverAuthCode`** | <code>string</code>                                       | The server authentication code.                                     |
 | **`authentication`** | <code><a href="#authentication">Authentication</a></code> | The authentication details including access, refresh and ID tokens. |
-
 
 #### Authentication
 
