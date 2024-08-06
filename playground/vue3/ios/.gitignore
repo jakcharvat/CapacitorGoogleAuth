@@ -9,4 +9,4 @@ capacitor-cordova-ios-plugins
 
 # Capacitor configuration
 App/App/capacitor.config.json
-App/GoogleService-Info.plist
+App/App/GoogleService-Info.plist
