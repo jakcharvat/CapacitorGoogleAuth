@@ -9,7 +9,6 @@ Capacitor plugin for Google Auth.
 <a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/v/@belongnet/capacitor-google-auth"></a> <a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/dt/@belongnet/capacitor-google-auth"></a> <a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/dw/@belongnet/capacitor-google-auth"></a> <a href="https://libraries.io/npm/@belongnet%2Fcapacitor-google-auth"><img alt="Dependents (via libraries.io)" src="https://img.shields.io/librariesio/dependents/npm/@belongnet/capacitor-google-auth"></a> <a href="https://packagephobia.com/result?p=@belongnet/capacitor-google-auth"><img alt="install size" src="https://packagephobia.com/badge?p=@belongnet/capacitor-google-auth"></a>
 </p>
 
-
 ## Install
 
 #### 1. Install package
@@ -17,10 +16,10 @@ Capacitor plugin for Google Auth.
 ```sh
 npm i --save @belongnet/capacitor-google-auth
 
-# pnpm 
+# pnpm
 pnpm add @belongnet/capacitor-google-auth
 
-# yarn 
+# yarn
 yarn add @belongnet/capacitor-google-auth
 ```
 
@@ -142,6 +141,31 @@ or see more [CapacitorGoogleAuth-Vue3-example](https://github.com/reslear/Capaci
 
 plugin first use `iosClientId` if not found use `clientId` if not found use value `CLIENT_ID` from file `GoogleService-Info.plist`
 
+Maybe need re-check structure manually in `Info.plist`, it should be like this:
+
+```xml
+  <key>CFBundleURLTypes</key>
+  <array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>REVERSED_CLIENT_ID</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.xxxxxx-xxxxxxxxxxxxxxxxxx</string>
+			</array>
+		</dict>
+	</array>
+```
+
+Is you don't use capacitor config, you can set clientId in `initialize` method specifically for platform:
+
+```ts
+    clientId:
+      Capacitor.getPlatform() === 'ios'
+        ? import.meta.env.VITE_GOOGLE_CLIENT_ID_IOS
+        : import.meta.env.VITE_GOOGLE_CLIENT_ID,
+```
+
 ### Android
 
 Set **Client ID** :
@@ -168,6 +192,7 @@ This plugin uses `com.google.android.gms:play-services-auth:21.2.0` by default, 
 **Refresh method**
 
 This method should be called when the app is initialized to establish if the user is currently logged in. If true, the method will return an accessToken, idToken and an empty refreshToken.
+
 ```ts
 checkLoggedIn() {
     GoogleAuth.refresh()
@@ -226,17 +251,18 @@ const config: CapacitorConfig = {
 
 export default config;
 ```
+
 #### Note: scopes can be configured under <code><a href="#initialize">initialize</a></code> function.
 
 ## API
 
 <docgen-index>
 
-* [`initialize(...)`](#initialize)
-* [`signIn()`](#signin)
-* [`refresh()`](#refresh)
-* [`signOut()`](#signout)
-* [Interfaces](#interfaces)
+- [`initialize(...)`](#initialize)
+- [`signIn()`](#signin)
+- [`refresh()`](#refresh)
+- [`signOut()`](#signout)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 <docgen-api>
@@ -256,8 +282,7 @@ Initializes the GoogleAuthPlugin, loading the gapi library and setting up the pl
 
 **Since:** 3.1.0
 
---------------------
-
+---
 
 ### signIn()
 
@@ -269,8 +294,7 @@ Initiates the sign-in process and returns a Promise that resolves with the user 
 
 **Returns:** <code>Promise&lt;<a href="#user">User</a>&gt;</code>
 
---------------------
-
+---
 
 ### refresh()
 
@@ -282,8 +306,7 @@ Refreshes the authentication token and returns a Promise that resolves with the 
 
 **Returns:** <code>Promise&lt;<a href="#authentication">Authentication</a>&gt;</code>
 
---------------------
-
+---
 
 ### signOut()
 
@@ -295,11 +318,9 @@ Signs out the user and returns a Promise.
 
 **Returns:** <code>Promise&lt;any&gt;</code>
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### InitOptions
 
@@ -308,7 +329,6 @@ Signs out the user and returns a Promise.
 | **`clientId`**           | <code>string</code>   | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |                    | 3.1.0      |
 | **`scopes`**             | <code>string[]</code> | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |                    | 3.4.0-rc.4 |
 | **`grantOfflineAccess`** | <code>boolean</code>  | Set if your application needs to refresh access tokens when the user is not present at the browser. In response use `serverAuthCode` key         | <code>false</code> | 3.1.0      |
-
 
 #### User
 
@@ -323,7 +343,6 @@ Signs out the user and returns a Promise.
 | **`serverAuthCode`** | <code>string</code>                                       | The server authentication code.                                     |
 | **`authentication`** | <code><a href="#authentication">Authentication</a></code> | The authentication details including access, refresh and ID tokens. |
 
-
 #### Authentication
 
 | Prop               | Type                | Description                                      |
@@ -333,88 +352,6 @@ Signs out the user and returns a Promise.
 | **`refreshToken`** | <code>string</code> | The refresh token.                               |
 
 </docgen-api>
-
-## Migration guide
-
-#### Migrate from 3.3.x to 3.4.x
-
-Install version 3.4.x:
-
-```sh
-npm i --save @belongnet/capacitor-google-auth@^3.4
-```
-
-Follow instruction for you project [Updating to Capacitor 6](https://capacitorjs.com/docs/next/updating/6-0).
-
-#### Migrate from 3.2.x to 3.3.x
-
-Install version 3.3.x:
-
-```sh
-npm i --save @belongnet/capacitor-google-auth^3.3
-```
-
-Follow instruction for you project [Updating from Capacitor 4 to Capacitor 5](https://capacitorjs.com/docs/updating/5-0).
-
-#### Migrate from 3.2.1 to 3.2.2
-
-for `Android` in file `MainActivity.onCreate`
-
-```diff
-- this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
--   add(GoogleAuth.class);
-- }});
-+ this.registerPlugin(GoogleAuth.class);
-```
-
-#### Migrate from 3.1.x to 3.2.x
-
-Install version 3.2.x:
-
-```sh
-npm i --save @belongnet/capacitor-google-auth^3.2
-```
-
-Follow instruction for you project [Updating from Capacitor 3 to Capacitor 4](https://capacitorjs.com/docs/updating/4-0).
-
-#### Migrate from 3.0.2 to 3.1.0
-
-```diff
-- GoogleAuth.init()
-+ GoogleAuth.initialize()
-```
-
-#### Migrate from 2 to 3
-
-Install version 3.x.x:
-
-```sh
-npm i --save @belongnet/capacitor-google-auth^3.0
-```
-
-After [migrate to Capcitor 3](https://capacitorjs.com/docs/updating/3-0) updating you projects, see diff:
-
-##### WEB
-
-```diff
-- import "@belongnet/capacitor-google-auth";
-- import { Plugins } from '@capacitor/core';
-+ import { GoogleAuth } from '@belongnet/capacitor-google-auth'
-
-- Plugins.GoogleAuth.signIn();
-+ GoogleAuth.init()
-+ GoogleAuth.signIn()
-```
-
-#### Migrate from 1 to 2
-
-Install version 2.x.x:
-
-```sh
-npm i --save @belongnet/capacitor-google-auth@2
-```
-
-for capacitor 2.x.x use [instruction](https://github.com/Belongnet/CapacitorGoogleAuth/blob/79129ab37288f5f5d0bb9a568a95890e852cebc2/README.md)
 
 ## License
 
