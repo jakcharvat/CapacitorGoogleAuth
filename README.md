@@ -1,32 +1,12 @@
-<h1 align="center">CapacitorGoogleAuth</h1>
+# CapacitorGoogleAuth
 
-<p align="center">
-<img src="assets/cover.gif" alt="cover" height="521">
-</p>
-
-<p align="center"><strong><code>@belongnet/capacitor-google-auth</code></strong></p>
-<p align="center"><strong>CAPACITOR 6</strong></p>
-<p align="center">
-Capacitor plugin for Google Auth.
-</p>
-<br>
-<p align="center">
-<a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/v/@belongnet/capacitor-google-auth"></a> <a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/dt/@belongnet/capacitor-google-auth"></a> <a href="https://www.npmjs.com/package/@belongnet/capacitor-google-auth"><img alt="npm" src="https://img.shields.io/npm/dw/@belongnet/capacitor-google-auth"></a> <a href="https://libraries.io/npm/@belongnet%2Fcapacitor-google-auth"><img alt="Dependents (via libraries.io)" src="https://img.shields.io/librariesio/dependents/npm/@belongnet/capacitor-google-auth"></a> <a href="https://packagephobia.com/result?p=@belongnet/capacitor-google-auth"><img alt="install size" src="https://packagephobia.com/badge?p=@belongnet/capacitor-google-auth"></a>
-</p>
+> A Capacitor 6 plugin for Google Auth.
 
 ## Install
 
 #### 1. Install package
 
-```sh
-npm i --save @belongnet/capacitor-google-auth
-
-# pnpm
-pnpm add @belongnet/capacitor-google-auth
-
-# yarn
-yarn add @belongnet/capacitor-google-auth
-```
+> todo!
 
 #### 2. Update capacitor deps
 
@@ -34,18 +14,14 @@ yarn add @belongnet/capacitor-google-auth
 npx cap update
 ```
 
-## Updating
-
-If need migrate to different Capacitor versions [see instruction for migrate plugin to new version](#migration-guide).
-
 ## Usage
 
-### WEB
+### Web
 
 Register plugin and manually initialize
 
 ```ts
-import { GoogleAuth } from '@belongnet/capacitor-google-auth';
+import { GoogleAuth } from "todo";
 
 // use hook after platform dom ready
 GoogleAuth.initialize({
@@ -94,8 +70,8 @@ initializeApp() {
 sign in function
 
 ```ts
-import { GoogleAuth } from "@belongnet/capacitor-google-auth";
-import { Auth, GoogleAuthProvider, signInWithCredential } from '@angular/fire/auth';
+import { GoogleAuth } from "todo";
+import { Auth, GoogleAuthProvider, signInWithCredential } from "@angular/fire/auth";
 
 async googleSignIn() {
   let googleUser = await GoogleAuth.signIn();
@@ -106,8 +82,8 @@ async googleSignIn() {
   constructor(private auth: Auth){}
 
   const googleUser = await GoogleAuth.signIn();
-  const _credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
-  return signInWithCredential(this.auth, _credential);
+  const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
+  return signInWithCredential(this.auth, credential);
 }
 ```
 
@@ -115,8 +91,8 @@ async googleSignIn() {
 
 ```vue
 <script setup lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import { GoogleAuth } from '@belongnet/capacitor-google-auth';
+import { defineComponent, onMounted } from "vue";
+import { GoogleAuth } from "todo";
 
 onMounted(() => {
   GoogleAuth.initialize();
@@ -242,8 +218,6 @@ Provide configuration in root `capacitor.config.json`
 or in `capacitor.config.ts`
 
 ```ts
-/// <reference types="'@belongnet/capacitor-google-auth'" />
-
 const config: CapacitorConfig = {
   plugins: {
     GoogleAuth: {
