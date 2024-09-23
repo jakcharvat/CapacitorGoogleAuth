@@ -1,3 +1,10 @@
+/// <reference types="@capacitor/cli" />
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    GoogleAuth: GoogleAuthPluginOptions;
+  }
+}
+
 export interface User {
   /**
    * The unique identifier for the user.
