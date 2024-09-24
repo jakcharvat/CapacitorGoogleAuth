@@ -10,7 +10,11 @@ import kotlinx.serialization.json.Json
 
 @CapacitorPlugin(name = "GoogleAuth")
 class GoogleAuthPlugin : Plugin() {
-    private val implementation = GoogleAuth(this.activity.applicationContext)
+    private lateinit var implementation: GoogleAuth
+
+    override fun load(){
+        implementation = GoogleAuth(this.activity.applicationContext)
+    }
 
     @PluginMethod
     suspend fun initialize(call: PluginCall) {
