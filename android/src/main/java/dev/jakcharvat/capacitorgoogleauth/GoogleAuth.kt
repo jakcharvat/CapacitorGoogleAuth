@@ -6,6 +6,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.CredentialManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.Serializable
 
@@ -26,16 +27,14 @@ class GoogleAuth(
             .addCredentialOption(googleIdOption)
             .build()
 
-        return coroutineScope {
+        val credential = coroutineScope {
             val credentialResponse = credentialManager.getCredential(context, request)
-            val credential = credentialResponse.credential
+            credentialResponse.credential
+        }
 
-            if (credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                return@coroutineScope null;
-            }
-
-            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-            return@coroutineScope User.createFrom(googleIdTokenCredential)
+        return when (credential.type) {
+            TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> User.createFrom(GoogleIdTokenCredential.createFrom(credential.data))
+            else -> null
         }
     }
 
