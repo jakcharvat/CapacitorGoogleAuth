@@ -1,22 +1,21 @@
-package dev.jakcharvat.capacitorgoogleauth;
+package dev.jakcharvat.capacitorgoogleauth
 
-import com.getcapacitor.JSObject;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.JSObject
+import com.getcapacitor.Plugin
+import com.getcapacitor.PluginCall
+import com.getcapacitor.PluginMethod
+import com.getcapacitor.annotation.CapacitorPlugin
 
 @CapacitorPlugin(name = "GoogleAuth")
-public class GoogleAuthPlugin extends Plugin {
-
-    private GoogleAuth implementation = new GoogleAuth();
+class GoogleAuthPlugin : Plugin() {
+    private val implementation = GoogleAuth()
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    fun echo(call: PluginCall) {
+        val value: String? = call.getString("value")
 
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
+        val ret = JSObject()
+        ret.put("value", value?.let { implementation.echo(it) })
+        call.resolve(ret)
     }
 }

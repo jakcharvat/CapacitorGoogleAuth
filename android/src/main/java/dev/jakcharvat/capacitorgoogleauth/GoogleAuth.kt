@@ -1,11 +1,10 @@
-package dev.jakcharvat.capacitorgoogleauth;
+package dev.jakcharvat.capacitorgoogleauth
 
-import android.util.Log;
+import android.util.Log
 
-public class GoogleAuth {
-
-    public String echo(String value) {
-        Log.i("Echo", value);
-        return value;
+class GoogleAuth {
+    fun echo(value: String): String {
+        Log.i("Echo", value)
+        return value
     }
 }
