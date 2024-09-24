@@ -26,5 +26,6 @@
     "declarationMap": true,
     "outDir": "dist/esm",
     "sourceMap": true
-  }
+  },
+  "files": ["src/index.ts"]
 }
