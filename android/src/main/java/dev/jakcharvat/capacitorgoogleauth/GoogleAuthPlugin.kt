@@ -17,7 +17,7 @@ class GoogleAuthPlugin : Plugin() {
     }
 
     @PluginMethod
-    suspend fun initialize(call: PluginCall) {
+    fun initialize(call: PluginCall) {
         call.resolve()
     }
 
