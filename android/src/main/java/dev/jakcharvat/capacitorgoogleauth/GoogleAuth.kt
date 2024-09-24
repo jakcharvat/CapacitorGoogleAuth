@@ -18,7 +18,7 @@ class GoogleAuth(
     suspend fun signIn(): User? {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(true)
-            .setServerClientId(config.clientId)
+            .setServerClientId(config.webClientId)
             .setAutoSelectEnabled(true)
             .build()
 
@@ -82,6 +82,6 @@ class GoogleAuth(
     )
 
     data class Config(
-        val clientId: String
+        val webClientId: String
     )
 }

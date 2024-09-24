@@ -14,8 +14,8 @@ class GoogleAuthPlugin : Plugin() {
     private lateinit var implementation: GoogleAuth
 
     override fun load(){
-        val clientId = config.getString("clientId")
-        implementation = GoogleAuth(this.bridge.activity, GoogleAuth.Config(clientId))
+        val webClientId = config.getString("webClientId")
+        implementation = GoogleAuth(this.bridge.activity, GoogleAuth.Config(webClientId))
     }
 
     @PluginMethod
