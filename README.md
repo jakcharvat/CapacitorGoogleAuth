@@ -1,6 +1,6 @@
 # @jakcharvat/capacitor-google-auth
 
-duer
+A Capacitor 6 plugin for Google Auth.
 
 ## Install
 
