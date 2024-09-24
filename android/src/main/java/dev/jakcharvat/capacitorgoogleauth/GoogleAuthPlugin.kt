@@ -5,6 +5,7 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -22,16 +23,20 @@ class GoogleAuthPlugin : Plugin() {
     }
 
     @PluginMethod
-    suspend fun signIn(call: PluginCall) {
-        when (val user = implementation.signIn()) {
-            is GoogleAuth.User -> call.resolve(JSObject(Json.encodeToString(user)))
-            else -> call.reject("Sign-in failed")
+    fun signIn(call: PluginCall) {
+        runBlocking {
+            when (val user = implementation.signIn()) {
+                is GoogleAuth.User -> call.resolve(JSObject(Json.encodeToString(user)))
+                else -> call.reject("Sign-in failed")
+            }
         }
     }
 
     @PluginMethod
-    suspend fun signOut(call: PluginCall) {
-        implementation.signOut()
-        call.resolve()
+    fun signOut(call: PluginCall) {
+        runBlocking {
+            implementation.signOut()
+            call.resolve()
+        }
     }
 }
