@@ -12,14 +12,15 @@ import kotlinx.serialization.Serializable
 const val WEB_CLIENT_ID = "";
 
 class GoogleAuth(
-    private val context: Context
+    private val context: Context,
+    private val config: Config
 ) {
     private val credentialManager = CredentialManager.create(context)
 
     suspend fun signIn(): User? {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(true)
-            .setServerClientId(WEB_CLIENT_ID)
+            .setServerClientId(config.clientId)
             .setAutoSelectEnabled(true)
             .build()
 
@@ -82,9 +83,7 @@ class GoogleAuth(
         val refreshToken: String?
     )
 
-    data class InitOptions(
-        val clientId: String?,
-        val scopes: List<String>?,
-        val grantOfflineAccess: Boolean?
+    data class Config(
+        val clientId: String
     )
 }
