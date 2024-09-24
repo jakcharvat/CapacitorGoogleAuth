@@ -13,6 +13,11 @@ class GoogleAuthPlugin : Plugin() {
     private val implementation = GoogleAuth(this.activity.applicationContext)
 
     @PluginMethod
+    suspend fun initialize(call: PluginCall) {
+        call.resolve()
+    }
+
+    @PluginMethod
     suspend fun signIn(call: PluginCall) {
         when (val user = implementation.signIn()) {
             is GoogleAuth.User -> call.resolve(JSObject(Json.encodeToString(user)))
