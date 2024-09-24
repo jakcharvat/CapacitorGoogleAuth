@@ -90,19 +90,6 @@ export interface GoogleAuthPluginOptions {
    * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
    */
   scopes?: string[];
-
-  /**
-   * This is used for offline access and server side handling
-   * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-   * @default false
-   */
-  serverClientId?: string;
-
-  /**
-   * Force user to select email address to regenerate AuthCode used to get a valid refreshtoken (work on iOS and Android)
-   * @default false
-   */
-  forceCodeForRefreshToken?: boolean;
 }
 
 export interface InitOptions {
@@ -121,14 +108,6 @@ export interface InitOptions {
    * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
    */
   scopes?: string[];
-
-  /**
-   * Set if your application needs to refresh access tokens when the user is not present at the browser.
-   * In response use `serverAuthCode` key
-   *
-   * @default false
-   * */
-  grantOfflineAccess?: boolean;
 }
 
 export interface GoogleAuthPlugin {

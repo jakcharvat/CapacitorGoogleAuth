@@ -67,11 +67,10 @@ Signs out the user and returns a Promise.
 
 #### InitOptions
 
-| Prop                     | Type                  | Description                                                                                                                                      | Default            |
-| ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| **`clientId`**           | <code>string</code>   | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |                    |
-| **`scopes`**             | <code>string[]</code> | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |                    |
-| **`grantOfflineAccess`** | <code>boolean</code>  | Set if your application needs to refresh access tokens when the user is not present at the browser. In response use `serverAuthCode` key         | <code>false</code> |
+| Prop           | Type                  | Description                                                                                                                                      |
+| -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`clientId`** | <code>string</code>   | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |
+| **`scopes`**   | <code>string[]</code> | Specifies the scopes required for accessing Google APIs The default is defined in the configuration.                                             |
 
 
 #### User
