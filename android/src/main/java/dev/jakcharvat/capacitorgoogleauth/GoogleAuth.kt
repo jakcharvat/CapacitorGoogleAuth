@@ -9,8 +9,6 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.Serializable
 
-const val WEB_CLIENT_ID = "";
-
 class GoogleAuth(
     private val context: Context,
     private val config: Config
