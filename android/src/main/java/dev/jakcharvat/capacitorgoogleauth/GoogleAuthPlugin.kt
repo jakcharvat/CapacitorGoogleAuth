@@ -14,7 +14,7 @@ class GoogleAuthPlugin : Plugin() {
     private lateinit var implementation: GoogleAuth
 
     override fun load(){
-        implementation = GoogleAuth(this.activity.applicationContext)
+        implementation = GoogleAuth(this.bridge.activity)
     }
 
     @PluginMethod
