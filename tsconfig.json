@@ -3,15 +3,11 @@
     // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "Preserve",
     "moduleDetection": "force",
     "esModuleInterop": true,
-
-    // Bundler mode
-    "moduleResolution": "Node",
-    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true,
 
     // Best practices
     "strict": true,
@@ -24,8 +20,10 @@
     "noPropertyAccessFromIndexSignature": true,
 
     // Output
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
     "outDir": "dist/esm",
     "sourceMap": true
-  },
-  "files": ["src/index.ts"]
+  }
 }
