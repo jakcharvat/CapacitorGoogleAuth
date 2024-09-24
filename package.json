@@ -2,7 +2,7 @@
   "name": "@jakcharvat/capacitor-google-auth",
   "version": "0.0.1",
   "type": "module",
-  "description": "duer",
+  "description": "A Capacitor 6 plugin for Google Auth.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -16,7 +16,7 @@
     "Package.swift",
     "JakcharvatCapacitorGoogleAuth.podspec"
   ],
-  "author": "",
+  "author": "jakcharvat",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && bun build.ts && tsc",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
@@ -55,6 +55,7 @@
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@types/bun": "^1.1.10",
     "eslint": "^9.11.1",
     "prettier": "3.3.3",
     "prettier-plugin-java": "^2.6.4",

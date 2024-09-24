@@ -7,6 +7,7 @@
     "moduleDetection": "force",
     "esModuleInterop": true,
     "isolatedModules": true,
+    "isolatedDeclarations": true,
     "verbatimModuleSyntax": true,
 
     // Best practices
