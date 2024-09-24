@@ -1,20 +1,31 @@
 {
   "compilerOptions": {
-    "allowUnreachableCode": false,
-    "declaration": true,
+    // Enable latest features
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
     "esModuleInterop": true,
-    "inlineSources": true,
-    "lib": ["dom", "es2017"],
-    "module": "esnext",
-    "moduleResolution": "node",
+
+    // Bundler mode
+    "moduleResolution": "Node",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
+
+    // Some stricter flags
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Output
     "outDir": "dist/esm",
-    "pretty": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2017"
+    "sourceMap": true
   },
   "files": ["src/index.ts"]
 }
