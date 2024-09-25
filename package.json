@@ -40,7 +40,7 @@
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "bun run clean && bun run docgen && bun build.ts && tsc",
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf dist",
     "watch": "tsc --watch",
     "prepublishOnly": "bun run build"
   },
