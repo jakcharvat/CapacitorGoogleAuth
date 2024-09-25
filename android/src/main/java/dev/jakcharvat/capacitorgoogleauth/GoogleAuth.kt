@@ -17,20 +17,35 @@ class GoogleAuth(
     private val credentialManager = CredentialManager.create(context)
 
     suspend fun signIn(): User? {
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(true)
-            .setServerClientId(config.webClientId)
-            .setAutoSelectEnabled(true)
-            .build()
-
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
-
-        val credential = coroutineScope {
-            val credentialResponse = credentialManager.getCredential(context, request)
-            credentialResponse.credential
+        val credentialResponse = tryOrNull {
+            credentialManager.getCredential(context, googleIdCredentialRequest(filterByAuthorizedAccounts = true))
+        } ?: tryOrNull {
+            credentialManager.getCredential(context, googleIdCredentialRequest(filterByAuthorizedAccounts = false))
         }
+
+        val credential = credentialResponse?.credential
+
+        return when (credential?.type) {
+            TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> User.createFrom(GoogleIdTokenCredential.createFrom(credential.data))
+            else -> null
+        }
+    }
+
+    private fun googleIdCredentialRequest(
+        filterByAuthorizedAccounts: Boolean,
+        autoSelectEnabled: Boolean = true,
+        requireVerifiedPhoneNumber: Boolean = true,
+    ): GetCredentialRequest {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setServerClientId(config.webClientId)
+            .setFilterByAuthorizedAccounts(filterByAuthorizedAccounts)
+            .setAutoSelectEnabled(autoSelectEnabled)
+            .setRequestVerifiedPhoneNumber(requireVerifiedPhoneNumber)
+            .setNonce(Base64.encodeToString(ByteArray(32).also { SecureRandom().nextBytes(it) }, Base64.URL_SAFE))
+            .build()
+
+        return GetCredentialRequest(listOf(googleIdOption))
+    }
 
         return when (credential.type) {
             TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> User.createFrom(GoogleIdTokenCredential.createFrom(credential.data))
