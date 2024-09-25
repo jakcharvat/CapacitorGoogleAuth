@@ -47,15 +47,7 @@ class GoogleAuth(
         return GetCredentialRequest(listOf(googleIdOption))
     }
 
-        return when (credential.type) {
-            TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> User.createFrom(GoogleIdTokenCredential.createFrom(credential.data))
-            else -> null
-        }
-    }
-
-    suspend fun signOut() {
-        credentialManager.clearCredentialState(ClearCredentialStateRequest())
-    }
+    suspend fun signOut(): Unit? = tryOrNull { credentialManager.clearCredentialState(ClearCredentialStateRequest()) }
 
     @Serializable
     data class User(
