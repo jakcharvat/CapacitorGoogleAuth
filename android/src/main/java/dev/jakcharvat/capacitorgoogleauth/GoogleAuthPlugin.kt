@@ -36,8 +36,10 @@ class GoogleAuthPlugin : Plugin() {
     @PluginMethod
     fun signOut(call: PluginCall) {
         runBlocking {
-            implementation.signOut()
-            call.resolve()
+            when (implementation.signOut()) {
+                is Unit -> call.resolve()
+                else -> call.reject("Sign-out failed")
+            }
         }
     }
 }
