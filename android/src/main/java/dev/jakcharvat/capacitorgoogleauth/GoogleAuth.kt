@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 import android.util.Base64
 import java.security.SecureRandom
 
-class GoogleAuth(
+internal class GoogleAuth(
     private val context: Context,
     private val config: Config,
 ) {
