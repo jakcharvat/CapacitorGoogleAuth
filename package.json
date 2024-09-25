@@ -54,6 +54,7 @@
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
     "@types/bun": "^1.1.10",
+    "@types/gapi.auth2": "^0.0.61",
     "eslint": "^9.11.1",
     "prettier": "3.3.3",
     "prettier-plugin-java": "^2.6.4",
