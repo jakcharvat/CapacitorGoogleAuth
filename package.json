@@ -29,20 +29,20 @@
     "native"
   ],
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify": "bun run verify:ios && bun run verify:android && bun run verify:web",
     "verify:ios": "xcodebuild -scheme JakcharvatCapacitorGoogleAuth -destination generic/platform=iOS",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
-    "verify:web": "npm run build",
-    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
-    "eslint": "eslint . --ext ts",
+    "verify:web": "bun run build",
+    "lint": "bun run eslint && bun run prettier -- --check && bun run swiftlint -- lint",
+    "fmt": "bun run eslint -- --fix && bun run prettier -- --write && bun run swiftlint -- --fix --format",
+    "eslint": "eslint .",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && bun build.ts && tsc",
-    "clean": "rimraf ./dist",
+    "build": "bun run clean && bun run docgen && bun build.ts && tsc",
+    "clean": "rm -rf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@capacitor/android": "^6.0.0",
@@ -50,18 +50,22 @@
     "@capacitor/core": "^6.0.0",
     "@capacitor/docgen": "^0.2.2",
     "@capacitor/ios": "^6.0.0",
+    "@eslint/js": "^9.11.1",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
     "@types/bun": "^1.1.10",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/eslint__js": "^8.42.3",
     "@types/gapi.auth2": "^0.0.61",
     "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
     "prettier": "3.3.3",
     "prettier-plugin-java": "^2.6.4",
-    "rimraf": "^6.0.1",
     "rollup": "^4.22.4",
     "swiftlint": "^2.0.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.7.0"
   },
   "peerDependencies": {
     "@capacitor/core": "^6.0.0"
