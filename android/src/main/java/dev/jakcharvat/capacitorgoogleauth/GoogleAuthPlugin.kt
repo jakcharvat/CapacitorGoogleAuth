@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 class GoogleAuthPlugin : Plugin() {
     private lateinit var implementation: GoogleAuth
 
-    override fun load(){
+    override fun load() {
         val webClientId = config.getString("webClientId")
         implementation = GoogleAuth(this.bridge.activity, GoogleAuth.Config(webClientId))
     }
