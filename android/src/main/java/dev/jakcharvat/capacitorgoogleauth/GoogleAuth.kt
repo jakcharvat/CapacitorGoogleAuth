@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 
 class GoogleAuth(
     private val context: Context,
-    private val config: Config
+    private val config: Config,
 ) {
     private val credentialManager = CredentialManager.create(context)
 
@@ -51,7 +51,7 @@ class GoogleAuth(
         val givenName: String,
         val imageUrl: String,
         val serverAuthCode: String,
-        val authentication: Authentication
+        val authentication: Authentication,
     ) {
         companion object {
             fun createFrom(idTokenCredential: GoogleIdTokenCredential): User {
@@ -77,10 +77,10 @@ class GoogleAuth(
     data class Authentication(
         val accessToken: String,
         val idToken: String,
-        val refreshToken: String?
+        val refreshToken: String?,
     )
 
     data class Config(
-        val webClientId: String
+        val webClientId: String,
     )
 }
