@@ -7,8 +7,9 @@ import androidx.credentials.CredentialManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.Serializable
+import android.util.Base64
+import java.security.SecureRandom
 
 class GoogleAuth(
     private val context: Context,
