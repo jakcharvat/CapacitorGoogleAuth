@@ -3,10 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "description": "A Capacitor 6 plugin for Google Auth.",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "android/src/main/",
     "android/build.gradle",
