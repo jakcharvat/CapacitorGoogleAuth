@@ -3,6 +3,7 @@ import type { GoogleAuthPlugin, InitOptions, User } from './definitions';
 
 const GAPI_SCRIPT_ID = 'gapi' as const;
 const GAPI_SRC = 'https://apis.google.com/js/platform.js' as const;
+const CLIENT_ID_NAME = 'google-signin-client_id' as const;
 
 type InitializationErrorKind =
   | 'NoDocumentOrWindow'
@@ -29,19 +30,21 @@ export class InitializationError extends Error {
 export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   options?: InitOptions;
 
+  private static getMetaClientId(): string | null {
+    const elements = document.getElementsByName(CLIENT_ID_NAME);
+    if (!(elements[0] instanceof HTMLMetaElement)) {
+      return null;
+    }
+    return elements[0].content;
+  }
+
   async initialize(
     _options: Partial<InitOptions> = {
       clientId: '',
       scopes: [],
     },
   ): Promise<void> {
-    const metaClientId = (
-      document.getElementsByName(
-        'google-signin-client_id',
-      )[0] as HTMLMetaElement
-    )?.content;
-
-    const clientId = _options.clientId ?? metaClientId ?? '';
+    const clientId = _options.clientId ?? GoogleAuthWeb.getMetaClientId() ?? '';
     if (!clientId) throw new InitializationError('NoClientId');
 
     this.options = {
