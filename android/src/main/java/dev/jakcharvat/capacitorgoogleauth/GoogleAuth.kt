@@ -69,7 +69,7 @@ internal class GoogleAuth(
                     idTokenCredential.displayName ?: "",
                     idTokenCredential.familyName ?: "",
                     idTokenCredential.givenName ?: "",
-                    idTokenCredential.profilePictureUri.toString(),
+                    idTokenCredential.profilePictureUri?.toString() ?: "",
                     "???",
                     Authentication(
                         "???",
