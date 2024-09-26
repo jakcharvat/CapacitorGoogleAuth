@@ -65,7 +65,7 @@ internal class GoogleAuth(
             fun createFrom(idTokenCredential: GoogleIdTokenCredential): User {
                 return User(
                     idTokenCredential.id,
-                    "???",
+                    idTokenCredential.id,
                     idTokenCredential.displayName ?: "",
                     idTokenCredential.familyName ?: "",
                     idTokenCredential.givenName ?: "",
