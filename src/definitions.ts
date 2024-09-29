@@ -67,21 +67,23 @@ export interface Authentication {
 
 export interface GoogleAuthPluginOptions {
   /**
-   * The default app's client ID, found and created in the Google Developers Console.
-   * common for Android or iOS
-   * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-   */
-  clientId?: string;
-
-  /**
-   * Specific client ID key for iOS
+   * iOS Client ID
    */
   iosClientId?: string;
 
   /**
-   * Specific client ID key for Android
+   * Web client ID used for Google auth on Android.
+   *
+   * The Google Credential Manager expects to receive a web client ID on Android as the server
+   * client ID, passed through this property.
+   *
+   * It is still necessary to create an Android app in the Google cloud console, but its client ID
+   * does **not** need to get passed to this plugin, it is pulled automatically based on the app's
+   * signature.
+   *
+   * @see https://developer.android.com/identity/sign-in/credential-manager-siwg
    */
-  androidClientId?: string;
+  androidWebClientId?: string;
 
   /**
    * Specifies the default scopes required for accessing Google APIs.
@@ -92,7 +94,7 @@ export interface GoogleAuthPluginOptions {
   scopes?: string[];
 }
 
-export interface InitOptions {
+export interface WebInitOptions {
   /**
    * The app's client ID, found and created in the Google Developers Console.
    * Common for Android or iOS.
@@ -108,6 +110,15 @@ export interface InitOptions {
    * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
    */
   scopes?: string[];
+}
+
+export interface InitOptions {
+  /**
+   * Web plugin initialization options.
+   *
+   * These options are only read when the plugin is running on the web
+   */
+  web: WebInitOptions;
 }
 
 export interface GoogleAuthPlugin {

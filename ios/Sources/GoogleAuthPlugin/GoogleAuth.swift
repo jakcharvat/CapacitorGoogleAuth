@@ -52,20 +52,13 @@ struct GoogleAuth {
     }
 
     private func getClientId(from config: PluginConfig) -> String? {
-        if let clientId = config.getString("iosClientId")
-            ?? config.getString("clientId")
-        {
-            return clientId
-        }
+        if let clientId = config.getString("iosClientId") { return clientId }
 
         if let url = Bundle.main.url(forResource: "GoogleService-Info", withExtension: "plist"),
             let dict = try? NSDictionary(contentsOf: url, error: ()),
-            let clientId = dict["CLIENT_ID"] as? String
-        {
-            return clientId
-        }
+            let clientId = dict["CLIENT_ID"] as? String { return clientId }
 
-        return Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String
+        return nil
     }
 
     private func handleOpenUrl(with notification: Notification) {
