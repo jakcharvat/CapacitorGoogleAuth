@@ -1,6 +1,6 @@
 {
   "name": "@jakcharvat/capacitor-google-auth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "description": "A Capacitor 6 plugin for Google Auth.",
   "module": "dist/index.js",
