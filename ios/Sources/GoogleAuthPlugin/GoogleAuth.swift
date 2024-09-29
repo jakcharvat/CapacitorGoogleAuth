@@ -84,7 +84,7 @@ struct GoogleAuth {
     }
 
     @MainActor
-    private func getSignedInUser(from signIn: GIDSignIn, using viewController: UIViewController) async throws
+    private func getSignedInUser(from signIn: GIDSignIn, in viewController: UIViewController) async throws
         -> GIDGoogleUser?
     {
         if let user = signIn.currentUser { return user }
@@ -101,26 +101,10 @@ struct GoogleAuth {
                 return .failure(.uninitializedGoogleAuth())
             }
 
-            guard let googleUser = try await getSignedInUser(from: signIn, using: viewController),
-                  let profile = googleUser.profile,
-                  let idToken = googleUser.idToken else {
+            guard let googleUser = try await getSignedInUser(from: signIn, in: viewController),
+                  let user = User(from: googleUser) else {
                 return .failure(.signInFailed)
             }
-
-            let user = User(
-                id: googleUser.userID ?? "",
-                email: profile.email,
-                name: profile.name,
-                familyName: profile.familyName ?? "",
-                givenName: profile.givenName ?? "",
-                imageUrl: profile.imageURL(withDimension: 100)?.absoluteString ?? "",
-                serverAuthCode: "???",
-                authentication: Authentication(
-                    accessToken: googleUser.accessToken.tokenString,
-                    idToken: idToken.tokenString,
-                    refreshToken: googleUser.refreshToken.tokenString
-                )
-            )
 
             guard let data = try? JSONEncoder().encode(user),
                   let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -159,4 +143,44 @@ private struct User: Encodable {
     let imageUrl: String
     let serverAuthCode: String
     let authentication: Authentication
+
+    init(
+        id: String,
+        email: String,
+        name: String,
+        familyName: String,
+        givenName: String,
+        imageUrl: String,
+        serverAuthCode: String,
+        authentication: Authentication
+    ) {
+        self.id = id
+        self.email = email
+        self.name = name
+        self.familyName = familyName
+        self.givenName = givenName
+        self.imageUrl = imageUrl
+        self.serverAuthCode = serverAuthCode
+        self.authentication = authentication
+    }
+
+    init?(from googleUser: GIDGoogleUser) {
+        guard let profile = googleUser.profile,
+              let idToken = googleUser.idToken else { return nil }
+
+        self.init(
+            id: googleUser.userID ?? "",
+            email: profile.email,
+            name: profile.name,
+            familyName: profile.familyName ?? "",
+            givenName: profile.givenName ?? "",
+            imageUrl: profile.imageURL(withDimension: 100)?.absoluteString ?? "",
+            serverAuthCode: "???",
+            authentication: Authentication(
+                accessToken: googleUser.accessToken.tokenString,
+                idToken: idToken.tokenString,
+                refreshToken: googleUser.refreshToken.tokenString
+            )
+        )
+    }
 }
