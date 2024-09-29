@@ -1,17 +1,31 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "lib": ["dom", "es2017"],
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
+    // Enable latest features
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "isolatedDeclarations": true,
+    "verbatimModuleSyntax": true,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Some stricter flags
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "dist/esm",
-    "sourceMap": true,
-    "target": "es2017"
+    "noPropertyAccessFromIndexSignature": true,
+
+    // Output
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "sourceMap": true
   },
   "files": ["src/index.ts"]
 }

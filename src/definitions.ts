@@ -1,5 +1,4 @@
 /// <reference types="@capacitor/cli" />
-
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     GoogleAuth: GoogleAuthPluginOptions;
@@ -71,19 +70,16 @@ export interface GoogleAuthPluginOptions {
    * The default app's client ID, found and created in the Google Developers Console.
    * common for Android or iOS
    * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-   * @since 3.1.0
    */
   clientId?: string;
 
   /**
    * Specific client ID key for iOS
-   * @since 3.1.0
    */
   iosClientId?: string;
 
   /**
    * Specific client ID key for Android
-   * @since 3.1.0
    */
   androidClientId?: string;
 
@@ -94,19 +90,6 @@ export interface GoogleAuthPluginOptions {
    * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
    */
   scopes?: string[];
-
-  /**
-   * This is used for offline access and server side handling
-   * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-   * @default false
-   */
-  serverClientId?: string;
-
-  /**
-   * Force user to select email address to regenerate AuthCode used to get a valid refreshtoken (work on iOS and Android)
-   * @default false
-   */
-  forceCodeForRefreshToken?: boolean;
 }
 
 export interface InitOptions {
@@ -115,7 +98,6 @@ export interface InitOptions {
    * Common for Android or iOS.
    * The default is defined in the configuration.
    * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-   * @since 3.1.0
    */
   clientId?: string;
 
@@ -126,22 +108,12 @@ export interface InitOptions {
    * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
    */
   scopes?: string[];
-
-  /**
-   * Set if your application needs to refresh access tokens when the user is not present at the browser.
-   * In response use `serverAuthCode` key
-   *
-   * @default false
-   * @since 3.1.0
-   * */
-  grantOfflineAccess?: boolean;
 }
 
 export interface GoogleAuthPlugin {
   /**
    * Initializes the GoogleAuthPlugin, loading the gapi library and setting up the plugin.
    * @param options - Optional initialization options.
-   * @since 3.1.0
    */
   initialize(options?: InitOptions): Promise<void>;
 
@@ -151,12 +123,7 @@ export interface GoogleAuthPlugin {
   signIn(): Promise<User>;
 
   /**
-   * Refreshes the authentication token and returns a Promise that resolves with the updated authentication details.
-   */
-  refresh(): Promise<Authentication>;
-
-  /**
    * Signs out the user and returns a Promise.
    */
-  signOut(): Promise<any>;
+  signOut(): Promise<void>;
 }

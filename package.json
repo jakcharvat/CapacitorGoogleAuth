@@ -1,66 +1,79 @@
 {
   "name": "@jakcharvat/capacitor-google-auth",
-  "version": "7.0.0-alpha",
-  "description": "Google Auth plugin for capacitor.",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A Capacitor 6 plugin for Google Auth.",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Sources",
+    "ios/Tests",
+    "Package.swift",
+    "JakcharvatCapacitorGoogleAuth.podspec"
+  ],
+  "author": "jakcharvat",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakcharvat/CapacitorGoogleAuth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jakcharvat/CapacitorGoogleAuth/issues"
+  },
   "keywords": [
     "capacitor",
     "plugin",
-    "native",
-    "google",
-    "auth",
-    "firebase",
-    "angular",
-    "vue",
-    "react",
-    "ionic"
-  ],
-  "bugs": {
-    "url": "https://github.com/belongnet/CapacitorGoogleAuth/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/belongnet/CapacitorGoogleAuth"
-  },
-  "license": "MIT",
-  "author": "Belongnet",
-  "main": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "files": [
-    "dist/",
-    "ios/",
-    "android/",
-    "!android/src/androidTest",
-    "!android/src/test",
-    "BelongnetCapacitorGoogleAuth.podspec"
+    "native"
   ],
   "scripts": {
-    "build": "pnpm run clean && tsc",
-    "clean": "rm -rf ./dist",
-    "dev": "tsc --watch",
-    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md",
-    "format": "prettier --write ./src",
-    "prepare": "tsc",
-    "prepublishOnly": "pnpm run build",
-    "test": "echo \"no test specified\""
+    "verify": "bun run verify:ios && bun run verify:android && bun run verify:web",
+    "verify:ios": "xcodebuild -scheme JakcharvatCapacitorGoogleAuth -destination generic/platform=iOS",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "bun run build",
+    "lint": "bun run eslint && bun run prettier -- --check && bun run swiftlint -- lint",
+    "fmt": "bun run eslint -- --fix && bun run prettier -- --write && bun run swiftlint -- --fix --format",
+    "eslint": "eslint .",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "node-swiftlint",
+    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "bun run clean && bun run docgen && bun build.ts && tsc",
+    "clean": "rm -rf dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "bun run build"
   },
-  "prettier": "@ionic/prettier-config",
   "devDependencies": {
-    "@capacitor/android": "^6.1.1",
-    "@capacitor/cli": "^6.1.1",
-    "@capacitor/core": "^6.1.1",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.0.0",
     "@capacitor/docgen": "^0.2.2",
-    "@capacitor/ios": "^6.1.1",
-    "@ionic/prettier-config": "^4.0.0",
-    "@types/gapi": "0.0.42",
-    "@types/gapi.auth2": "0.0.56",
-    "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "@capacitor/ios": "^6.0.0",
+    "@eslint/js": "^9.11.1",
+    "@ionic/eslint-config": "^0.4.0",
+    "@ionic/prettier-config": "^1.0.1",
+    "@ionic/swiftlint-config": "^1.1.2",
+    "@types/bun": "^1.1.10",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/eslint__js": "^8.42.3",
+    "@types/gapi.auth2": "^0.0.61",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.3.3",
+    "prettier-plugin-java": "^2.6.4",
+    "rollup": "^4.22.4",
+    "swiftlint": "^2.0.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.7.0"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.1.1"
+    "@capacitor/core": "^6.0.0"
   },
-  "publishConfig": {
-    "access": "public"
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
   },
   "capacitor": {
     "ios": {

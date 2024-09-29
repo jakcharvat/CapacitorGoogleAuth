@@ -1,25 +1,70 @@
 import { WebPlugin } from '@capacitor/core';
-import { GoogleAuthPlugin, InitOptions, User } from './definitions';
+import type { GoogleAuthPlugin, InitOptions, User } from './definitions';
+
+const GAPI_SCRIPT_ID = 'gapi' as const;
+const GAPI_SRC = 'https://apis.google.com/js/platform.js' as const;
+const CLIENT_ID_NAME = 'google-signin-client_id' as const;
+
+type InitializationErrorKind =
+  | 'NoDocumentOrWindow'
+  | 'DuplicateScript'
+  | 'NoClientId'
+  | 'MissingOptions';
+
+export class InitializationError extends Error {
+  constructor(kind: InitializationErrorKind) {
+    super(
+      `GoogleAuthPlugin error: ${
+        {
+          NoDocumentOrWindow: 'Missing html <document> element',
+          DuplicateScript: `The script tag <script id="${GAPI_SCRIPT_ID}"> already exists`,
+          NoClientId: 'Missing web client ID',
+          MissingOptions:
+            'The unthinkable happened and plugin options are missing',
+        }[kind]
+      }`,
+    );
+  }
+}
 
 export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
-  gapiLoaded: Promise<void>;
-  options: InitOptions;
+  options?: InitOptions;
 
-  constructor() {
-    super();
+  private static getMetaClientId(): string | null {
+    const elements = document.getElementsByName(CLIENT_ID_NAME);
+    if (!(elements[0] instanceof HTMLMetaElement)) {
+      return null;
+    }
+    return elements[0].content;
   }
 
-  loadScript() {
-    if (typeof document === 'undefined') {
-      return;
+  async initialize(
+    _options: Partial<InitOptions> = {
+      clientId: '',
+      scopes: [],
+    },
+  ): Promise<void> {
+    const clientId = _options.clientId ?? GoogleAuthWeb.getMetaClientId() ?? '';
+    if (!clientId) throw new InitializationError('NoClientId');
+
+    this.options = {
+      clientId,
+      scopes: _options.scopes ?? [],
+    };
+
+    await this.loadScript();
+    await this.addUserChangeListener();
+  }
+
+  async loadScript(): Promise<void> {
+    if (!(window instanceof Window) || !(document instanceof Document)) {
+      throw new InitializationError('NoDocumentOrWindow');
     }
 
     const scriptId = 'gapi';
-    const scriptEl = document?.getElementById(scriptId);
+    const scriptEl = document.getElementById(scriptId);
 
-    if (scriptEl) {
-      return;
-    }
+    if (scriptEl) throw new InitializationError('DuplicateScript');
 
     const head = document.getElementsByTagName('head')[0];
     const script = document.createElement('script');
@@ -28,108 +73,60 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
     script.defer = true;
     script.async = true;
     script.id = scriptId;
-    script.onload = this.platformJsLoaded.bind(this);
-    script.src = 'https://apis.google.com/js/platform.js';
-    head.appendChild(script);
-  }
 
-  initialize(
-    _options: Partial<InitOptions> = {
-      clientId: '',
-      scopes: [],
-      grantOfflineAccess: false,
-    },
-  ): Promise<void> {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const metaClientId = (document.getElementsByName('google-signin-client_id')[0] as any)?.content;
-    const clientId = _options.clientId || metaClientId || '';
-
-    if (!clientId) {
-      console.warn('GoogleAuthPlugin - clientId is empty');
-    }
-
-    this.options = {
-      clientId,
-      grantOfflineAccess: _options.grantOfflineAccess ?? false,
-      scopes: _options.scopes || [],
-    };
-
-    this.gapiLoaded = new Promise((resolve) => {
-      // HACK: Relying on window object, can't get property in gapi.load callback
-      (window as any).gapiResolve = resolve;
-      this.loadScript();
-    });
-
-    this.addUserChangeListener();
-    return this.gapiLoaded;
-  }
-
-  platformJsLoaded() {
-    gapi.load('auth2', () => {
-      // https://github.com/Belongnet/CapacitorGoogleAuth/issues/202#issuecomment-1147393785
-      const clientConfig: gapi.auth2.ClientConfig & { plugin_name: string } = {
-        client_id: this.options.clientId,
-        plugin_name: 'BelongnetCapacitorGoogleAuth',
-      };
-
-      if (this.options.scopes.length) {
-        clientConfig.scope = this.options.scopes.join(' ');
-      }
-
-      gapi.auth2.init(clientConfig);
-      (window as any).gapiResolve();
-    });
-  }
-
-  async signIn() {
-    return new Promise<User>(async (resolve, reject) => {
-      try {
-        let serverAuthCode: string;
-        const needsOfflineAccess = this.options.grantOfflineAccess ?? false;
-
-        if (needsOfflineAccess) {
-          const offlineAccessResponse = await gapi.auth2.getAuthInstance().grantOfflineAccess();
-          serverAuthCode = offlineAccessResponse.code;
-        } else {
-          await gapi.auth2.getAuthInstance().signIn();
-        }
-
-        const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-
-        if (needsOfflineAccess) {
-          // HACK: AuthResponse is null if we don't do this when using grantOfflineAccess
-          await googleUser.reloadAuthResponse();
-        }
-
-        const user = this.getUserFrom(googleUser);
-        user.serverAuthCode = serverAuthCode;
-        resolve(user);
-      } catch (error) {
+    await new Promise<void>((resolve, reject) => {
+      script.onload = () => resolve();
+      script.onerror = (_event, _source, _lineno, _colno, error) =>
         reject(error);
-      }
+      script.src = GAPI_SRC;
+      head.appendChild(script);
+    });
+
+    await this.initializeGapi();
+  }
+
+  async initializeGapi(): Promise<void> {
+    await new Promise<void>((resolve, reject) => {
+      gapi.load('auth2', () => {
+        if (!this.options) {
+          reject(new InitializationError('MissingOptions'));
+          return;
+        }
+
+        // https://github.com/CodetrixStudio/CapacitorGoogleAuth/issues/202#issuecomment-1147393785
+        const clientConfig: gapi.auth2.ClientConfig & { plugin_name: string } =
+          {
+            client_id: this.options.clientId,
+            plugin_name: 'JakcharvatCapacitorGoogleAuth',
+          };
+
+        if (this.options.scopes?.length) {
+          clientConfig.scope = this.options.scopes.join(' ');
+        }
+
+        gapi.auth2.init(clientConfig);
+        resolve();
+      });
     });
   }
 
-  async refresh() {
-    const authResponse = await gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
-    return {
-      accessToken: authResponse.access_token,
-      idToken: authResponse.id_token,
-      refreshToken: '',
-    };
+  async signIn(): Promise<User> {
+    if (!this.options) throw new InitializationError('MissingOptions');
+
+    const googleUser = await gapi.auth2.getAuthInstance().signIn();
+    return this.getUserFrom(googleUser);
   }
 
-  async signOut() {
-    return gapi.auth2.getAuthInstance().signOut();
+  async signOut(): Promise<void> {
+    await gapi.auth2.getAuthInstance().signOut();
   }
 
   private async addUserChangeListener() {
-    await this.gapiLoaded;
-    gapi.auth2.getAuthInstance().currentUser.listen((googleUser) => {
-      this.notifyListeners('userChange', googleUser.isSignedIn() ? this.getUserFrom(googleUser) : null);
+    gapi.auth2.getAuthInstance().currentUser.listen(googleUser => {
+      this.notifyListeners(
+        'userChange',
+        googleUser.isSignedIn() ? this.getUserFrom(googleUser) : null,
+      );
     });
   }
 
