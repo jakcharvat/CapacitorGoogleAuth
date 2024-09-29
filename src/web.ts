@@ -27,8 +27,13 @@ export class InitializationError extends Error {
   }
 }
 
+type GoogleAuthWebOptions = {
+  clientId: string;
+  scopes: string[];
+};
+
 export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
-  options?: InitOptions;
+  options?: GoogleAuthWebOptions;
 
   private static getMetaClientId(): string | null {
     const elements = document.getElementsByName(CLIENT_ID_NAME);
@@ -39,17 +44,15 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   }
 
   async initialize(
-    _options: Partial<InitOptions> = {
-      clientId: '',
-      scopes: [],
-    },
+    { web: webOptions }: InitOptions = { web: {} },
   ): Promise<void> {
-    const clientId = _options.clientId ?? GoogleAuthWeb.getMetaClientId() ?? '';
+    const clientId =
+      webOptions?.clientId ?? GoogleAuthWeb.getMetaClientId() ?? null;
     if (!clientId) throw new InitializationError('NoClientId');
 
     this.options = {
       clientId,
-      scopes: _options.scopes ?? [],
+      scopes: webOptions?.scopes ?? [],
     };
 
     await this.loadScript();

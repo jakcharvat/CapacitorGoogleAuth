@@ -67,6 +67,13 @@ Signs out the user and returns a Promise.
 
 #### InitOptions
 
+| Prop      | Type                                                      | Description                                                                                          |
+| --------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **`web`** | <code><a href="#webinitoptions">WebInitOptions</a></code> | Web plugin initialization options. These options are only read when the plugin is running on the web |
+
+
+#### WebInitOptions
+
 | Prop           | Type                  | Description                                                                                                                                      |
 | -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`clientId`** | <code>string</code>   | The app's client ID, found and created in the Google Developers Console. Common for Android or iOS. The default is defined in the configuration. |
