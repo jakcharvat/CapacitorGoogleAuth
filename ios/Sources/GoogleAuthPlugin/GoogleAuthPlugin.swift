@@ -1,23 +1,44 @@
-import Foundation
 import Capacitor
+import Foundation
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(GoogleAuthPlugin)
 public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "GoogleAuthPlugin"
     public let jsName = "GoogleAuth"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = GoogleAuth()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    private var implementation = GoogleAuth()
+
+    @objc func initialize(_ call: CAPPluginCall) {
+        switch implementation.initialize(config: getConfig()) {
+        case .success(): call.resolve()
+        case .failure(let error): call.reject(error.localizedDescription)
+        }
+    }
+
+    @objc func signIn(_ call: CAPPluginCall) {
+        guard let vc = self.bridge?.viewController else {
+            fatalError("Sign in called and Capacitor has no viewController")
+        }
+
+        Task.detached { [self] in
+            switch await implementation.signIn(in: vc) {
+            case .success(let data): call.resolve(data)
+            case .failure(let error): call.reject(error.localizedDescription)
+            }
+        }
+    }
+
+    @objc func signOut(_ call: CAPPluginCall) {
+        Task.detached { [self] in
+            switch await implementation.signOut() {
+            case .success(): call.resolve()
+            case .failure(let error): call.reject(error.localizedDescription)
+            }
+        }
     }
 }

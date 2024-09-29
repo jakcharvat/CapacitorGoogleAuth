@@ -10,14 +10,16 @@ let package = Package(
             targets: ["GoogleAuthPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "main")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "main"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMinor(from: "7.1.0")),
     ],
     targets: [
         .target(
             name: "GoogleAuthPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm")
+                .product(name: "Cordova", package: "capacitor-swift-pm"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS")
             ],
             path: "ios/Sources/GoogleAuthPlugin"),
         .testTarget(
