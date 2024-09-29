@@ -1,23 +1,31 @@
-import Foundation
 import Capacitor
+import Foundation
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(GoogleAuthPlugin)
 public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "GoogleAuthPlugin"
     public let jsName = "GoogleAuth"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = GoogleAuth()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    private var implementation = GoogleAuth()
+
+    @objc func initialize(_ call: CAPPluginCall) {
+        implementation.initialize(call, config: getConfig())
+    }
+
+    @objc func signIn(_ call: CAPPluginCall) {
+        guard let vc = self.bridge?.viewController else {
+            fatalError("Sign in called and Capacitor has no viewController")
+        }
+
+        implementation.signIn(call, vc)
+    }
+
+    @objc func signOut(_ call: CAPPluginCall) {
+        implementation.signOut(call)
     }
 }
