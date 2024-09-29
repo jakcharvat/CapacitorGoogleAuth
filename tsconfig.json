@@ -24,7 +24,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationMap": true,
-    "outDir": "dist/esm",
+    "outDir": "dist",
     "sourceMap": true
   },
   "files": ["src/index.ts"]
