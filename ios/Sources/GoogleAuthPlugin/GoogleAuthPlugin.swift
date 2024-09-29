@@ -14,7 +14,10 @@ public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
     private var implementation = GoogleAuth()
 
     @objc func initialize(_ call: CAPPluginCall) {
-        implementation.initialize(call, config: getConfig())
+        switch implementation.initialize(config: getConfig()) {
+        case .success(): call.resolve()
+        case .failure(let error): call.reject(error.localizedDescription)
+        }
     }
 
     @objc func signIn(_ call: CAPPluginCall) {
@@ -22,10 +25,20 @@ public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
             fatalError("Sign in called and Capacitor has no viewController")
         }
 
-        implementation.signIn(call, vc)
+        Task.detached { [self] in
+            switch await implementation.signIn(in: vc) {
+            case .success(let data): call.resolve(data)
+            case .failure(let error): call.reject(error.localizedDescription)
+            }
+        }
     }
 
     @objc func signOut(_ call: CAPPluginCall) {
-        implementation.signOut(call)
+        Task.detached { [self] in
+            switch await implementation.signOut() {
+            case .success(): call.resolve()
+            case .failure(let error): call.reject(error.localizedDescription)
+            }
+        }
     }
 }

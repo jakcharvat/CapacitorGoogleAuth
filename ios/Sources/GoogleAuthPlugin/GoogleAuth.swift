@@ -2,16 +2,39 @@ import Capacitor
 import Foundation
 import GoogleSignIn
 
+enum GoogleAuthError : Error {
+    case noClientId
+    case uninitializedGoogleAuth(inFunction: String = #function)
+    case signInFailed
+    case invalidUserData
+
+    case passthrough(Error)
+
+    var localizedDescription: String {
+        switch self {
+        case .noClientId:
+            return "No client ID found in config"
+        case .uninitializedGoogleAuth(let inFunction):
+            return "Google auth not initialized when calling \(inFunction)"
+        case .signInFailed:
+            return "Google signin failed"
+        case .invalidUserData:
+            return "Google signin returned invalid user data"
+        case .passthrough(let error):
+            return "Google signin error: \(error.localizedDescription)"
+        }
+    }
+}
+
 struct GoogleAuth {
     var signIn: GIDSignIn?
     var additionalScopes: [String] = []
 
-    mutating func initialize(_ call: CAPPluginCall, config: PluginConfig) {
+    mutating func initialize(config: PluginConfig) -> Result<Void, GoogleAuthError> {
         let signIn = GIDSignIn.sharedInstance
 
         guard let clientId = getClientId(from: config) else {
-            call.reject("Couldn't load client ID from config")
-            return
+            return .failure(.noClientId)
         }
 
         additionalScopes = config.getArray("scopes") as? [String] ?? []
@@ -24,6 +47,8 @@ struct GoogleAuth {
             queue: nil,
             using: handleOpenUrl(with:)
         )
+
+        return .success(())
     }
 
     private func getClientId(from config: PluginConfig) -> String? {
@@ -41,9 +66,6 @@ struct GoogleAuth {
         }
 
         return Bundle.main.object(forInfoDictionaryKey: "CLIENT_ID") as? String
-    }
-
-    private func noSignIn(in call: CAPPluginCall) {
     }
 
     private func handleOpenUrl(with notification: Notification) {
@@ -73,55 +95,52 @@ struct GoogleAuth {
         ).user
     }
 
-    func signIn(_ call: CAPPluginCall, _ viewController: UIViewController) {
-        Task.detached {
-            do {
-                guard let signIn else {
-                    return call.reject("GoogleAuth must be initialized before signIn")
-                }
-
-                guard let googleUser = try await getSignedInUser(from: signIn, using: viewController),
-                      let profile = googleUser.profile,
-                      let idToken = googleUser.idToken else {
-                    return call.reject("Google sign in failed")
-                }
-
-                let user = User(
-                    id: googleUser.userID ?? "",
-                    email: profile.email,
-                    name: profile.name,
-                    familyName: profile.familyName ?? "",
-                    givenName: profile.givenName ?? "",
-                    imageUrl: profile.imageURL(withDimension: 100)?.absoluteString ?? "",
-                    serverAuthCode: "???",
-                    authentication: Authentication(
-                        accessToken: googleUser.accessToken.tokenString,
-                        idToken: idToken.tokenString,
-                        refreshToken: googleUser.refreshToken.tokenString
-                    )
-                )
-
-                guard let data = try? JSONEncoder().encode(user),
-                      let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                    return call.reject("Invalid user data")
-                }
-
-                call.resolve(dict)
-            } catch {
-                call.reject("\(error.localizedDescription) - \(error)")
+    func signIn(in viewController: UIViewController) async -> Result<[String : Any], GoogleAuthError> {
+        do {
+            guard let signIn else {
+                return .failure(.uninitializedGoogleAuth())
             }
+
+            guard let googleUser = try await getSignedInUser(from: signIn, using: viewController),
+                  let profile = googleUser.profile,
+                  let idToken = googleUser.idToken else {
+                return .failure(.signInFailed)
+            }
+
+            let user = User(
+                id: googleUser.userID ?? "",
+                email: profile.email,
+                name: profile.name,
+                familyName: profile.familyName ?? "",
+                givenName: profile.givenName ?? "",
+                imageUrl: profile.imageURL(withDimension: 100)?.absoluteString ?? "",
+                serverAuthCode: "???",
+                authentication: Authentication(
+                    accessToken: googleUser.accessToken.tokenString,
+                    idToken: idToken.tokenString,
+                    refreshToken: googleUser.refreshToken.tokenString
+                )
+            )
+
+            guard let data = try? JSONEncoder().encode(user),
+                  let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                return .failure(.invalidUserData)
+            }
+
+            return .success(dict)
+        } catch {
+            return .failure(.passthrough(error))
         }
     }
 
-    func signOut(_ call: CAPPluginCall) {
-        DispatchQueue.main.async {
-            guard let signIn else {
-                return call.reject("GoogleAuth must be initialized before signOut")
-            }
-
-            signIn.signOut()
-            call.resolve()
+    @MainActor
+    func signOut() async -> Result<(), GoogleAuthError> {
+        guard let signIn else {
+            return .failure(.uninitializedGoogleAuth())
         }
+
+        signIn.signOut()
+        return .success(())
     }
 }
 
