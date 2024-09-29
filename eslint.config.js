@@ -7,6 +7,6 @@ export default [
   ...ts.configs.recommended,
   eslintConfigPrettier,
   {
-    ignores: ['dist/', '**/build/'],
+    ignores: ['dist/', '**/build/', '.build'],
   },
 ];
